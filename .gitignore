@@ -1,0 +1,8 @@
+.aider*
+node_modules/
+vendor/
+.env
+storage/logs/*
+!storage/logs/.gitkeep
+.freebuff/
+*.log
