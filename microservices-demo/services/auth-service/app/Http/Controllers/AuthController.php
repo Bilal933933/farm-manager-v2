@@ -6,9 +6,11 @@ use App\Actions\Auth\LoginAction;
 use App\Actions\Auth\LogoutAction;
 use App\Actions\Auth\MeAction;
 use App\Actions\Auth\RegisterAction;
+use App\Actions\Auth\VerifyAction;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\MeResource;
+use App\Http\Resources\VerifyResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,5 +54,12 @@ class AuthController extends Controller
         $user = $action->execute($request->user());
 
         return (new MeResource($user))->response();
+    }
+
+    public function verify(Request $request, VerifyAction $action)
+    {
+        $user = $action->execute($request->user());
+
+        return (new VerifyResource($user))->response();
     }
 }
