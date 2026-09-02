@@ -38,7 +38,7 @@
 ┌─────────────────────────────────────────────┐
 │           API Gateway (Laravel)              │
 │         :8000                               │
-│    🔐 Sanctum SPA (Cookie) │ 📝 Rate Limit │ 🔄 Routing       │
+│ 🔐 Sanctum Hybrid (Cookie→Frontend, Bearer→Services) │ 📝 Rate Limit │ 🔄 Routing │
 └─────────────────────────────────────────────┘
                     │
     ┌───────────────┼───────────────┐
@@ -238,7 +238,7 @@ microservices-demo/
 |---------|-----------|
 | **Laravel 11** | إطار العمل |
 | **PostgreSQL 15** | قاعدة البيانات |
-| **Laravel Sanctum SPA (Cookie + CSRF)** | المصادقة |
+| **Laravel Sanctum Hybrid (Cookie للـ Frontend, Bearer للـ Services)** | المصادقة |
 | **Docker** | الحاويات |
 
 ### Frontend

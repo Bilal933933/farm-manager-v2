@@ -9,7 +9,7 @@
 | 1 | **التسجيل** | **A - Self-service** | الزائر يسجل شركته بنفسه عبر `POST /api/auth/register {company_name, admin_name, email, password}`. يتطلب `plan=trial` و `trial_ends_at +14 يوم` وبوابة دفع لاحقاً. |
 | 2 | **الأدوار** | **A - ثابتة** | 3 أدوار فقط: `مدير (كل الصلاحيات)`, `محاسب (مالية)`, `عامل (عرض)`. لا `RoleController`، الأدوار في `RoleSeeder` فقط. |
 | 3 | **الصلاحيات** | **B - نظامنا الخاص** | لا `spatie/laravel-permission`. نستخدم `permissions` + `role_permission` + `User::hasPermission()` يدوي. أخف وأنسب لـ 3 أدوار. |
-| 4 | **التوكن** | **B - Sanctum SPA** | من `Bearer Token` إلى `Cookie + CSRF`. يتطلب `SANCTUM_STATEFUL_DOMAINS=localhost:3000`, `supports_credentials=true`, `statefulApi()` في `bootstrap/app.php`. |
+| 4 | **التوكن** | **Hybrid - Sanctum Cookie→Frontend, Bearer→Services** | `Frontend→Gateway: Cookie + CSRF (SPA)` و `Gateway→Services: Bearer 1|... (Token)`. الكود الحالي `1|...` يخدم `Bearer` والـ `Cookie` يُضاف في `Gateway` لاحقاً. |
 | 5 | **Super Admin** | **A - للنظام فقط** | `super@basira.test` (`company_id=null`) يملك فقط `system.view, system.settings` ولا يملك `companies.*` أو `lands.*`. يدير النظام وليس الشركات. |
 
 ## الأثر على الكود الحالي
