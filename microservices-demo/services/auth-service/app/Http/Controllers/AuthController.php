@@ -9,37 +9,36 @@ use App\Actions\Auth\RegisterAction;
 use App\Actions\Auth\VerifyAction;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\CompanyResource;
 use App\Http\Resources\MeResource;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\VerifyResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request, RegisterAction $action)
     {
-        $resource = $action->execute($request->validated());
+        $result = $action->execute($request->validated());
 
-        Auth::login($resource->resource['user']);
-
-        if ($request->hasSession()) {
-            $request->session()->regenerate();
-        }
-
-        return $resource->response()->setStatusCode(201);
+        return response()->json(['success' => true, 'data' => [
+            'company' => new CompanyResource($result['company']),
+            'user' => new UserResource($result['user']),
+            'role' => $result['role']->name,
+            'token' => $result['token'],
+        ]], 201);
     }
 
     public function login(LoginRequest $request, LoginAction $action)
     {
-        $resource = $action->execute($request->input('email'), $request->input('password'));
+        $result = $action->execute($request->input('email'), $request->input('password'));
 
-        Auth::login($resource->resource['user']);
-
-        if ($request->hasSession()) {
-            $request->session()->regenerate();
-        }
-
-        return $resource->response();
+        return response()->json(['success' => true, 'data' => [
+            'user' => new UserResource($result['user']),
+            'company' => $result['user']->company ? new CompanyResource($result['user']->company) : null,
+            'role' => $result['user']->role?->name,
+            'token' => $result['token'],
+        ]]);
     }
 
     public function logout(Request $request, LogoutAction $action)
@@ -58,8 +57,14 @@ class AuthController extends Controller
 
     public function verify(Request $request, VerifyAction $action)
     {
-        $user = $action->execute($request->user());
+        $request->validate(['token' => 'required|string']);
 
-        return (new VerifyResource($user))->response();
+        $user = $action->execute($request->input('token'));
+
+        if (! $user) {
+            return response()->json(['valid' => false], 401);
+        }
+
+        return new VerifyResource($user);
     }
 }

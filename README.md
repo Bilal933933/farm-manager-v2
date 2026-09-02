@@ -138,7 +138,7 @@ npm run dev
 | `POST` | `/api/auth/login` | تسجيل الدخول |
 | `GET` | `/api/auth/me` | بيانات المستخدم الحالي |
 | `POST` | `/api/auth/logout` | تسجيل الخروج |
-| `GET` | `/api/auth/verify` | تحقق للخدمات الأخرى (Land, Inventory) |
+| `POST` | `/api/auth/verify` | تحقق للخدمات الأخرى (Land, Inventory) |
 
 **مثال: تسجيل دخول**
 ```bash
@@ -148,13 +148,8 @@ curl -X POST http://localhost:8001/api/login   -H "Content-Type: application/jso
 **الاستجابة:**
 ```json
 {
-  "user": {
-    "id": 1,
-    "name": "مدير النظام",
-    "email": "admin@example.com",
-    "company_id": 1
-  },
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+  "success": true,
+  "data": { "token": "1|AbCdEf...", "user": {"id":1, "name":"خالد"} }
 }
 ```
 

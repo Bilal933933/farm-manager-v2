@@ -3,7 +3,6 @@
 namespace App\Actions\Auth;
 
 use App\Actions\Company\CreateCompanyWithRolesAction;
-use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +11,7 @@ class RegisterAction
 {
     public function __construct(private CreateCompanyWithRolesAction $createCompanyAction) {}
 
-    public function execute(array $data): AuthResource
+    public function execute(array $data): array
     {
         $result = DB::transaction(function () use ($data) {
             $company = $this->createCompanyAction->execute($data['company_name'], $data['company_slug'] ?? null);
@@ -35,6 +34,13 @@ class RegisterAction
             ];
         });
 
-        return new AuthResource($result);
+        $token = $result['user']->createToken('auth')->plainTextToken;
+
+        return [
+            'company' => $result['company'],
+            'user' => $result['user'],
+            'role' => $result['role'],
+            'token' => $token,
+        ];
     }
 }
