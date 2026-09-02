@@ -2,6 +2,7 @@
 
 namespace App\Actions\Auth;
 
+use App\Http\Resources\AuthResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -13,7 +14,7 @@ class LoginAction
      * @throws ValidationException
      * @throws HttpException
      */
-    public function execute(string $email, string $password): User
+    public function execute(string $email, string $password): AuthResource
     {
         $user = User::with(['company', 'role.permissions'])
             ->where('email', $email)
@@ -44,6 +45,10 @@ class LoginAction
 
         $user->update(['last_login_at' => now()]);
 
-        return $user;
+        return new AuthResource([
+            'company' => $user->company,
+            'user' => $user,
+            'role' => $user->role,
+        ]);
     }
 }

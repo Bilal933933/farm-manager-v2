@@ -10,63 +10,29 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request, RegisterAction $registerAction)
+    public function register(RegisterRequest $request, RegisterAction $action)
     {
-        $result = $registerAction->execute($request->validated());
+        $resource = $action->execute($request->validated());
 
-        // تسجيل دخول تلقائي بعد التسجيل
-        Auth::login($result['user']);
+        Auth::login($resource->resource['user']);
 
-        // regenerate session للـ SPA
         if ($request->hasSession()) {
             $request->session()->regenerate();
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'company' => [
-                    'id' => $result['company']->id,
-                    'name' => $result['company']->name,
-                    'slug' => $result['company']->slug,
-                ],
-                'user' => [
-                    'id' => $result['user']->id,
-                    'name' => $result['user']->name,
-                    'email' => $result['user']->email,
-                ],
-                'role' => 'مدير',
-            ],
-        ], 201);
+        return $resource->response()->setStatusCode(201);
     }
 
     public function login(LoginRequest $request, LoginAction $action)
     {
-        $user = $action->execute($request->input('email'), $request->input('password'));
+        $resource = $action->execute($request->input('email'), $request->input('password'));
 
-        Auth::login($user);
+        Auth::login($resource->resource['user']);
 
-        // regenerate session للـ SPA
         if ($request->hasSession()) {
             $request->session()->regenerate();
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'company_id' => $user->company_id,
-                ],
-                'company' => $user->company ? [
-                    'id' => $user->company->id,
-                    'name' => $user->company->name,
-                    'plan' => $user->company->plan,
-                ] : null,
-                'role' => $user->role?->name,
-            ],
-        ]);
+        return $resource->response();
     }
 }

@@ -25,3 +25,10 @@
 - لا تحذف ملفات بدون تأكيد
 - لا تعمل commit تلقائي
 - اعرض التغييرات قبل تطبيقها
+
+## 6. قاعدة التقسيم المعمارية (دائمة)
+- `Controller` نحيف: يستدعي `Action` فقط `return $action->execute($request->validated())` - لا منطق، لا DB، لا Resources مباشرة
+- `Request` يتحكم في Validation فقط
+- `Action` هو المنسق: يستدعي ما يحتاجه `Models, Resources, Policies, Events, Actions أخرى` ويحتوي `DB::transaction`
+- `Resources` تحدد شكل JSON مرة واحدة `toArray()` - لا بناء array يدوي في Controller
+- `Policies` للتحقق من الصلاحيات داخل Action قبل التنفيذ
