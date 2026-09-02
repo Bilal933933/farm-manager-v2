@@ -32,13 +32,13 @@ class RoleSeeder extends Seeder
 
         // محاسب: المالية والمخزون
         $accountant->permissions()->sync(
-            collect(['finance.view','finance.create','finance.approve','reports.view','inventory.view'])
+            collect(['finance.view', 'finance.create', 'finance.approve', 'reports.view', 'inventory.view'])
                 ->map(fn ($n) => $perms[$n] ?? null)->filter()->values()->all()
         );
 
         // عامل: عرض فقط
         $worker->permissions()->sync(
-            collect(['lands.view','seasons.view','inventory.view'])
+            collect(['lands.view', 'seasons.view', 'inventory.view'])
                 ->map(fn ($n) => $perms[$n] ?? null)->filter()->values()->all()
         );
     }

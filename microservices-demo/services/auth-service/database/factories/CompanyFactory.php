@@ -15,10 +15,11 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         $name = fake()->company();
+
         return [
             'name' => $name,
-            'slug' => str($name)->slug()->toString() . '-' . fake()->unique()->randomNumber(4),
-            'license_number' => 'LIC-' . fake()->unique()->numerify('#####'),
+            'slug' => str($name)->slug()->toString().'-'.fake()->unique()->randomNumber(4),
+            'license_number' => 'LIC-'.fake()->unique()->numerify('#####'),
             'phone' => fake()->phoneNumber(),
             'email' => fake()->unique()->companyEmail(),
             'address' => fake()->address(),

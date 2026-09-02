@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -50,7 +52,7 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function forCompany(\App\Models\Company $company, ?\App\Models\Role $role = null): static
+    public function forCompany(Company $company, ?Role $role = null): static
     {
         return $this->state(fn (array $attributes) => [
             'company_id' => $company->id,

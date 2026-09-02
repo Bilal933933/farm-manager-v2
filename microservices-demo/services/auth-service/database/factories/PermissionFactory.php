@@ -15,8 +15,9 @@ class PermissionFactory extends Factory
     public function definition(): array
     {
         $group = fake()->randomElement(['lands', 'inventory', 'procurement', 'finance', 'users', 'companies']);
+
         return [
-            'name' => $group . '.' . fake()->unique()->word(),
+            'name' => $group.'.'.fake()->unique()->word(),
             'group_name' => $group,
             'guard_name' => 'web',
             'description' => fake()->sentence(),
