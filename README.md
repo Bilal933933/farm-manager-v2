@@ -38,7 +38,7 @@
 ┌─────────────────────────────────────────────┐
 │           API Gateway (Laravel)              │
 │         :8000                               │
-│    🔐 JWT │ 📝 Rate Limit │ 🔄 Routing       │
+│    🔐 Sanctum SPA (Cookie) │ 📝 Rate Limit │ 🔄 Routing       │
 └─────────────────────────────────────────────┘
                     │
     ┌───────────────┼───────────────┐
@@ -133,10 +133,12 @@ npm run dev
 
 | الطريقة | المسار | الوصف |
 |---------|--------|-------|
-| `POST` | `/api/register` | تسجيل مستخدم جديد |
-| `POST` | `/api/login` | تسجيل الدخول |
-| `GET` | `/api/me` | بيانات المستخدم الحالي |
-| `POST` | `/api/logout` | تسجيل الخروج |
+| `POST` | `/api/auth/register` | تسجيل شركة جديدة + مديرها (Self-service) |
+| `POST` | `/api/users` | إضافة موظف (لاحقاً) |
+| `POST` | `/api/auth/login` | تسجيل الدخول |
+| `GET` | `/api/auth/me` | بيانات المستخدم الحالي |
+| `POST` | `/api/auth/logout` | تسجيل الخروج |
+| `GET` | `/api/auth/verify` | تحقق للخدمات الأخرى (Land, Inventory) |
 
 **مثال: تسجيل دخول**
 ```bash
@@ -241,7 +243,7 @@ microservices-demo/
 |---------|-----------|
 | **Laravel 11** | إطار العمل |
 | **PostgreSQL 15** | قاعدة البيانات |
-| **Laravel Sanctum** | المصادقة (JWT) |
+| **Laravel Sanctum SPA (Cookie + CSRF)** | المصادقة |
 | **Docker** | الحاويات |
 
 ### Frontend
