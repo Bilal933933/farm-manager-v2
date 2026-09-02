@@ -38,7 +38,7 @@
 ┌─────────────────────────────────────────────┐
 │           API Gateway (Laravel)              │
 │         :8000                               │
-│ 🔐 Sanctum Hybrid (Cookie→Frontend, Bearer→Services) │ 📝 Rate Limit │ 🔄 Routing │
+│ 🔐 Sanctum Hybrid Proxy (Cookie Frontend→Gateway Proxy→Bearer Services) │ 📝 Rate Limit │ 🔄 Routing │
 └─────────────────────────────────────────────┘
                     │
     ┌───────────────┼───────────────┐
