@@ -10,7 +10,7 @@
 | 2 | **الأدوار** | **A - ثابتة** | 3 أدوار فقط: `مدير (كل الصلاحيات)`, `محاسب (مالية)`, `عامل (عرض)`. لا `RoleController`، الأدوار في `RoleSeeder` فقط. |
 | 3 | **الصلاحيات** | **B - نظامنا الخاص** | لا `spatie/laravel-permission`. نستخدم `permissions` + `role_permission` + `User::hasPermission()` يدوي. أخف وأنسب لـ 3 أدوار. |
 | 4 | **التوكن** | **Hybrid Proxy - Cookie→Gateway Proxy→Bearer** | `Frontend→Gateway: Cookie + CSRF` و `Gateway Proxy: يقرأ Cookie → يستخرج Token 1\|... → يرسل Bearer للـ Services`. **الحالة الحالية:** `Token` صرف `1\|...` (011/012) لأن `Gateway` لم يُبنى بعد - الـ `Hybrid` سيُطبق في مرحلة `api-gateway`. |
-| 5 | **Super Admin** | **A - للنظام فقط** | `super@basira.test` (`company_id=null`) يملك فقط `system.view, system.settings` ولا يملك `companies.*` أو `lands.*`. يدير النظام وليس الشركات. |
+| 5 | **Super Admin** | **A - للنظام فقط (قراءة شاملة)** | `super@basira.test` (`company_id=null`) يملك `system.view, system.settings` للاطلاع على كل العمليات/الإحصائيات في النظام، **ولا يستطيع تعديل بيانات الشركات**. كل شركة مستأجرة لها مديرها وأدوارها الخاصة (`مدير، محاسب، عامل`) معزولة بـ `company_id`. |
 
 ## الأثر على الكود الحالي
 
