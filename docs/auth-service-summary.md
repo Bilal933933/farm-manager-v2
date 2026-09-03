@@ -165,7 +165,7 @@ curl -X POST http://127.0.0.1:8001/api/login -H "Content-Type: application/json"
 | الخطوة | المطلوب |
 |--------|---------|
 | Controllers | `AuthController (register, login, verify, me, logout, refresh)`, `CompanyController`, `UserController`, `RoleController` |
-| Middleware | `TenantGuard` - يقرأ التوكن من `Authorization: Bearer` ويضيف `company_id` للـ Request |
+| Middleware | `TenantGuard` سيُنسخ في كل خدمة لاحقة (land/inventory/finance) وكل جدول فيها سيحمل `company_id` للعزل - `Company` هي المستأجر الوحيد (Tenant) وليست `Farm`. الحالي في `auth-service` يضيف `company_id` للـ Request. |
 | Requests | `RegisterRequest, LoginRequest (validation)` |
 | API | `POST /api/auth/register, /login, /verify, /me` + `GET /api/users, /roles` |
 
