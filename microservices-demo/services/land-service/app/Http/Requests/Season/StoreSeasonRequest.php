@@ -22,7 +22,7 @@ class StoreSeasonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => ['required', 'uuid'],
+            'product_id' => ['required', 'uuid', 'exists:crops,id'],
             'name' => ['nullable', 'string', 'max:150'],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date', 'after:start_date'],

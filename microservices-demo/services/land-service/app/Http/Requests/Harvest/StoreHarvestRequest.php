@@ -20,7 +20,7 @@ class StoreHarvestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => ['nullable', 'uuid'],
+            'product_id' => ['nullable', 'uuid', 'exists:crops,id'],
             'date' => ['required', 'date', 'before_or_equal:today'],
             'total_quantity' => ['required', 'numeric', 'min:0.01'],
             'unit' => ['required', 'string', 'max:20'],

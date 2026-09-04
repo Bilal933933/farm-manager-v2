@@ -28,7 +28,7 @@ class StoreSaleRequest extends FormRequest
 
         return [
             'harvest_id' => ['nullable', 'uuid', Rule::exists('harvests', 'id')->where('season_id', $seasonId)],
-            'product_id' => ['nullable', 'uuid'],
+            'product_id' => ['nullable', 'uuid', 'exists:crops,id'],
             'buyer_party_id' => ['required', 'uuid'],
             'buyer_name' => ['nullable', 'string', 'max:255'],
             'quantity' => ['required', 'numeric', 'min:0.01'],

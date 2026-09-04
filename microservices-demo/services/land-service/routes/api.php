@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\CostController;
+use App\Http\Controllers\Api\CropController;
 use App\Http\Controllers\Api\HarvestController;
 use App\Http\Controllers\Api\LandController;
 use App\Http\Controllers\Api\SaleController;
@@ -45,4 +46,10 @@ Route::middleware(['verify.service.token', SetRequestContext::class])->group(fun
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
     Route::put('/sales/{sale}', [SaleController::class, 'update']);
     Route::delete('/sales/{sale}', [SaleController::class, 'destroy']);
+
+    Route::get('/crops', [CropController::class, 'index']);
+    Route::post('/crops', [CropController::class, 'store']);
+    Route::get('/crops/{crop}', [CropController::class, 'show']);
+    Route::put('/crops/{crop}', [CropController::class, 'update']);
+    Route::delete('/crops/{crop}', [CropController::class, 'destroy']);
 });
