@@ -22,6 +22,7 @@ class Cost extends Model
 
     protected $fillable = [
         'season_id',
+        'harvest_id',
         'cost_type',
         'product_id',
         'quantity',
@@ -51,5 +52,13 @@ class Cost extends Model
     public function season(): BelongsTo
     {
         return $this->belongsTo(Season::class);
+    }
+
+    /**
+     * @return BelongsTo<Harvest, $this>
+     */
+    public function harvest(): BelongsTo
+    {
+        return $this->belongsTo(Harvest::class);
     }
 }

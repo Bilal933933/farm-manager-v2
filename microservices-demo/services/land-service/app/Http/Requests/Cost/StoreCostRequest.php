@@ -4,6 +4,7 @@ namespace App\Http\Requests\Cost;
 
 use App\Enums\CostType;
 use App\Enums\PaymentStatus;
+use App\Models\Season;
 use App\Traits\ExtractsRequestContext;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -22,6 +23,9 @@ class StoreCostRequest extends FormRequest
      */
     public function rules(): array
     {
+        $season = $this->route('season');
+        $seasonId = $season instanceof Season ? $season->id : $season;
+
         return [
             'cost_type' => ['required', Rule::enum(CostType::class)],
             'product_id' => ['nullable', 'uuid'],
@@ -32,6 +36,7 @@ class StoreCostRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'payment_status' => ['sometimes', Rule::enum(PaymentStatus::class)],
             'notes' => ['nullable', 'string'],
+            'harvest_id' => ['nullable', 'uuid', Rule::exists('harvests', 'id')->where('season_id', $seasonId)],
         ];
     }
 }

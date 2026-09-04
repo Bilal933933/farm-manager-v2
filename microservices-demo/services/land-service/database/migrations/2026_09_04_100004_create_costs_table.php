@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('costs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('season_id')->constrained('seasons')->cascadeOnDelete();
+            $table->foreignUuid('harvest_id')->nullable()->constrained('harvests')->nullOnDelete();
             $table->enum('cost_type', ['seeds', 'fertilizer', 'pesticides', 'labor', 'equipment', 'irrigation', 'transport', 'rent', 'other']);
             $table->uuid('product_id')->nullable()->index();
             $table->decimal('quantity', 12, 2)->nullable();
