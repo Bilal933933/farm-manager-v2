@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Enums\ProductStatus;
+use App\Enums\WarehouseStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Warehouse extends Model
 {
     use HasFactory;
     use HasUuids;
@@ -22,16 +22,14 @@ class Product extends Model
     protected $fillable = [
         'company_id',
         'name',
-        'description',
-        'unit',
-        'category',
+        'location',
         'status',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => ProductStatus::class,
+            'status' => WarehouseStatus::class,
         ];
     }
 
