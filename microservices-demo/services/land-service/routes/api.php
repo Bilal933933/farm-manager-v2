@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\LandController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Middleware\SetRequestContext;
@@ -17,4 +18,10 @@ Route::middleware(['verify.service.token', SetRequestContext::class])->group(fun
     Route::get('/seasons/{season}', [SeasonController::class, 'show']);
     Route::put('/seasons/{season}', [SeasonController::class, 'update']);
     Route::delete('/seasons/{season}', [SeasonController::class, 'destroy']);
+
+    Route::get('/lands/{land}/contracts', [ContractController::class, 'index']);
+    Route::post('/lands/{land}/contracts', [ContractController::class, 'store']);
+    Route::get('/contracts/{contract}', [ContractController::class, 'show']);
+    Route::put('/contracts/{contract}', [ContractController::class, 'update']);
+    Route::delete('/contracts/{contract}', [ContractController::class, 'destroy']);
 });
