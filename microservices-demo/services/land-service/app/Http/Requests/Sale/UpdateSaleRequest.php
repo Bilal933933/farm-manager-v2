@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Http\Requests\Sale;
+
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
+use App\Models\Sale;
+use App\Traits\ExtractsRequestContext;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class UpdateSaleRequest extends FormRequest
+{
+    use ExtractsRequestContext;
+
+    public function authorize(): bool
+    {
+        return $this->hasPermission($this, 'update_sales');
+    }
+
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function rules(): array
+    {
+        $sale = $this->route('sale');
+        $seasonId = $sale instanceof Sale ? $sale->season_id : null;
+
+        return [
+            'harvest_id' => ['nullable', 'uuid', Rule::exists('harvests', 'id')->where('season_id', $seasonId)],
+            'product_id' => ['nullable', 'uuid'],
+            'buyer_party_id' => ['sometimes', 'uuid'],
+            'buyer_name' => ['nullable', 'string', 'max:255'],
+            'quantity' => ['sometimes', 'numeric', 'min:0.01'],
+            'unit' => ['sometimes', 'string', 'max:20'],
+            'unit_price' => ['sometimes', 'numeric', 'min:0'],
+            'discount_amount' => ['nullable', 'numeric', 'min:0'],
+            'tax_amount' => ['nullable', 'numeric', 'min:0'],
+            'delivery_cost' => ['nullable', 'numeric', 'min:0'],
+            'currency' => ['nullable', 'string', 'max:10'],
+            'payment_method' => ['nullable', Rule::enum(PaymentMethod::class)],
+            'date' => ['sometimes', 'date'],
+            'due_date' => ['nullable', 'date', 'after_or_equal:date'],
+            'payment_status' => ['sometimes', Rule::enum(PaymentStatus::class)],
+            'notes' => ['nullable', 'string'],
+        ];
+    }
+}

@@ -18,8 +18,15 @@ return new class extends Migration
             $table->string('unit', 20)->default('kg');
             $table->decimal('unit_price', 12, 2);
             $table->decimal('total_price', 15, 2);
+            $table->decimal('discount_amount', 12, 2)->nullable();
+            $table->decimal('tax_amount', 12, 2)->nullable();
+            $table->decimal('delivery_cost', 12, 2)->nullable();
+            $table->string('currency', 10)->default('EGP');
+            $table->string('buyer_name', 255)->nullable();
+            $table->enum('payment_method', ['cash', 'bank_transfer', 'check', 'credit', 'installment'])->nullable();
             $table->date('date');
-            $table->enum('payment_status', ['paid', 'pending'])->default('paid');
+            $table->date('due_date')->nullable();
+            $table->enum('payment_status', ['paid', 'pending', 'partially_paid'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

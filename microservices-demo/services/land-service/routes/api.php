@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\CostController;
 use App\Http\Controllers\Api\HarvestController;
 use App\Http\Controllers\Api\LandController;
+use App\Http\Controllers\Api\SaleController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Middleware\SetRequestContext;
 use Illuminate\Support\Facades\Route;
@@ -38,4 +39,10 @@ Route::middleware(['verify.service.token', SetRequestContext::class])->group(fun
     Route::get('/harvests/{harvest}', [HarvestController::class, 'show']);
     Route::put('/harvests/{harvest}', [HarvestController::class, 'update']);
     Route::delete('/harvests/{harvest}', [HarvestController::class, 'destroy']);
+
+    Route::get('/seasons/{season}/sales', [SaleController::class, 'index']);
+    Route::post('/seasons/{season}/sales', [SaleController::class, 'store']);
+    Route::get('/sales/{sale}', [SaleController::class, 'show']);
+    Route::put('/sales/{sale}', [SaleController::class, 'update']);
+    Route::delete('/sales/{sale}', [SaleController::class, 'destroy']);
 });

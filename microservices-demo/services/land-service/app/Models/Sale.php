@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,11 +25,18 @@ class Sale extends Model
         'harvest_id',
         'product_id',
         'buyer_party_id',
+        'buyer_name',
         'quantity',
         'unit',
         'unit_price',
         'total_price',
+        'discount_amount',
+        'tax_amount',
+        'delivery_cost',
+        'currency',
+        'payment_method',
         'date',
+        'due_date',
         'payment_status',
         'notes',
     ];
@@ -39,7 +47,12 @@ class Sale extends Model
             'quantity' => 'decimal:2',
             'unit_price' => 'decimal:2',
             'total_price' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'tax_amount' => 'decimal:2',
+            'delivery_cost' => 'decimal:2',
+            'payment_method' => PaymentMethod::class,
             'date' => 'date',
+            'due_date' => 'date',
             'payment_status' => PaymentStatus::class,
         ];
     }
