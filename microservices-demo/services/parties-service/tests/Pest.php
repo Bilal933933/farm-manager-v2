@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Party;
+use App\Models\PartyRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /*
@@ -47,4 +50,20 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function createParty(string $company = 'comp-a', array $overrides = []): Party
+{
+    return Party::create(array_merge([
+        'company_id' => $company,
+        'name' => 'Party '.Str::random(8),
+        'phone' => '01'.rand(100000000, 999999999),
+    ], $overrides));
+}
+
+function createPartyRole(Party $party, array $overrides = []): PartyRole
+{
+    return $party->roles()->create(array_merge([
+        'role' => 'supplier',
+    ], $overrides));
 }
