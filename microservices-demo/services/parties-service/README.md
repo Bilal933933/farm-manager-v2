@@ -1,58 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Parties Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Microservice مسؤول عن إدارة الأطراف (Suppliers, Farmers, Lessors, Owners) في نظام Farm Manager.
 
-## About Laravel
+## الميزات الرئيسية
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- ✅ **Full CRUD Operations** مع validation محسّن
+- ✅ **API V1 Versioning** مع backwards compatibility
+- ✅ **Advanced Filtering & Search** مع caching
+- ✅ **Activity Logging** (Audit Trail)
+- ✅ **Bulk Operations** للعمليات الجماعية
+- ✅ **Database Optimization** مع strategic indexes
+- ✅ **Error Handling** الشامل
+- ✅ **Soft Deletes** للـ Parties و Roles
+- ✅ **Pagination** المتقدمة
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## البدء السريع
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### التثبيت
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cd microservices-demo/services/parties-service
+composer install
+php artisan migrate
+php artisan db:seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### تشغيل الخوادم
 
-## Contributing
+```bash
+php artisan serve --port=8001
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### الاختبارات
 
-## Code of Conduct
+```bash
+# جميع الاختبارات
+php artisan test --compact
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Tests محددة
+php artisan test tests/Feature/Api/V1/PartyApiTest.php
 
-## Security Vulnerabilities
+# Formatting
+vendor/bin/pint --dirty --format agent
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## الـ API Endpoints
 
-## License
+### Parties
+- `GET /api/v1/parties` - List with filters
+- `POST /api/v1/parties` - Create
+- `GET /api/v1/parties/{id}` - Show
+- `PUT /api/v1/parties/{id}` - Update
+- `DELETE /api/v1/parties/{id}` - Soft delete
+- `DELETE /api/v1/parties/bulk/delete` - Bulk delete
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Party Roles
+- `GET /api/v1/parties/{party}/roles` - List roles
+- `POST /api/v1/parties/{party}/roles` - Add role
+- `DELETE /api/v1/parties/{party}/roles/{role}` - Remove role
+
+### Activity Logs
+- `GET /api/v1/activity-logs` - List logs
+- `GET /api/v1/parties/{id}/activity-logs` - Party logs
+
+## الأمثلة
+
+### البحث والتصفية
+
+```bash
+# البحث بـ keyword
+GET /api/v1/parties?search=John
+
+# التصفية بـ status
+GET /api/v1/parties?status=active
+
+# التصفية بـ role
+GET /api/v1/parties?role=supplier
+
+# الترتيب
+GET /api/v1/parties?sort_by=name&sort_order=asc
+
+# الـ Pagination
+GET /api/v1/parties?per_page=20&page=2
+```
+
+### إنشاء طرف
+
+```bash
+POST /api/v1/parties
+Content-Type: application/json
+
+{
+  "name": "Farm Supplies Co",
+  "email": "info@farm.com",
+  "phone": "1234567890",
+  "status": "active"
+}
+```
+
+### حذف جماعي
+
+```bash
+DELETE /api/v1/parties/bulk/delete
+Content-Type: application/json
+
+{
+  "ids": ["id1", "id2", "id3"]
+}
+```
+
+## الهيكل
+
+```
+app/
+├── Actions/         # Business logic
+├── Models/          # Eloquent models
+├── Services/        # Helper services
+├── Http/
+│   ├── Controllers/ # API controllers
+│   └── Resources/   # API resources
+├── Observers/       # Event observers
+└── Exceptions/      # Custom exceptions
+
+database/
+├── migrations/      # Database migrations
+├── factories/       # Model factories
+└── seeders/         # Database seeders
+
+tests/
+├── Feature/         # Feature tests
+├── Unit/            # Unit tests
+└── TestCase.php     # Test base class
+```
+
+## معلومات إضافية
+
+- 📖 **Documentation**: راجع `API.md` لـ complete API docs
+- 🎯 **Improvements**: راجع `IMPROVEMENTS.md` للـ details الكاملة للـ improvements
+- 📝 **Conventions**: راجع `CONVENTIONS.md` لـ coding standards
+
+## الاختبارات
+
+### الحالة الحالية
+- ✅ 76+ tests passing
+- ✅ Factory pattern setup
+- ✅ Comprehensive model tests
+- ⚠️ Feature/Integration tests need middleware setup
+
+### تشغيل tests مفصلة
+
+```bash
+# جميع tests
+php artisan test --compact
+
+# Feature tests فقط
+php artisan test tests/Feature/
+
+# Unit tests فقط
+php artisan test tests/Unit/ --compact
+
+# Test محدد
+php artisan test --filter="test_search_parties"
+```
+
+## التطوير المستقبلي
+
+- [ ] GraphQL API
+- [ ] Advanced export (CSV, Excel)
+- [ ] Webhooks support
+- [ ] Batch async processing
+- [ ] Rate limiting
+- [ ] Full-text search
+- [ ] Geolocation filtering
+
+## المساهمة
+
+يرجى اتباع `CONVENTIONS.md` عند المساهمة في المشروع.
+
+## الترخيص
+
+هذا المشروع مرخص تحت الـ MIT License
+

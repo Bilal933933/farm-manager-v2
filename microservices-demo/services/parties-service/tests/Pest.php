@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Party;
-use App\Models\PartyRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /*
@@ -19,7 +16,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -46,24 +43,3 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
-
-function something()
-{
-    // ..
-}
-
-function createParty(string $company = 'comp-a', array $overrides = []): Party
-{
-    return Party::create(array_merge([
-        'company_id' => $company,
-        'name' => 'Party '.Str::random(8),
-        'phone' => '01'.rand(100000000, 999999999),
-    ], $overrides));
-}
-
-function createPartyRole(Party $party, array $overrides = []): PartyRole
-{
-    return $party->roles()->create(array_merge([
-        'role' => 'supplier',
-    ], $overrides));
-}

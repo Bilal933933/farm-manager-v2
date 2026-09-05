@@ -11,10 +11,14 @@ return new class extends Migration
         Schema::create('party_roles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('party_id')->constrained('parties')->cascadeOnDelete();
-            $table->enum('role', ['supplier', 'farmer', 'owner', 'tenant', 'buyer', 'lessor', 'contractor']);
+            $table->enum('role', ['supplier', 'farmer', 'owner', 'tenant', 'buyer', 'lessor', 'contractor'])->index();
             $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             $table->unique(['party_id', 'role']);
+
+            // Index for filtering by role type
+            $table->index(['party_id', 'role']);
         });
     }
 

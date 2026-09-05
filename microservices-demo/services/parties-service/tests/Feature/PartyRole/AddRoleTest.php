@@ -3,24 +3,24 @@
 use Illuminate\Support\Str;
 
 test('rejects role on unknown party', function () {
-    $response = $this->postJson('/api/parties/'.(string) Str::uuid().'/roles', ['role' => 'supplier'], $this->serviceHeaders('comp-a', ['update_parties']));
+    $response = $this->postJson('/api/parties/'.(string) Str::uuid().'/roles', ['role' => 'supplier'], $this->serviceHeaders('comp-a', 'user-1', ['update_parties']));
 
     $response->assertStatus(404);
 });
 
 test('rejects duplicate role for same party', function () {
-    $party = createParty();
-    createPartyRole($party, ['role' => 'supplier']);
+    $party = $this->createParty('comp-a');
+    $this->createPartyRole($party, ['role' => 'supplier']);
 
-    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'supplier'], $this->serviceHeaders('comp-a', ['update_parties']));
+    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'supplier'], $this->serviceHeaders('comp-a', 'user-1', ['update_parties']));
 
     $response->assertStatus(422);
 });
 
 test('adds role to party', function () {
-    $party = createParty();
+    $party = $this->createParty('comp-a');
 
-    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'buyer'], $this->serviceHeaders('comp-a', ['update_parties']));
+    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'buyer'], $this->serviceHeaders('comp-a', 'user-1', ['update_parties']));
 
     $response->assertStatus(201);
     $response->assertJsonPath('data.role', 'buyer');
@@ -28,17 +28,17 @@ test('adds role to party', function () {
 });
 
 test('rejects role on another company party', function () {
-    $party = createParty('comp-a');
+    $party = $this->createParty('comp-a');
 
-    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'buyer'], $this->serviceHeaders('comp-b', ['update_parties']));
+    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'buyer'], $this->serviceHeaders('comp-b', 'user-1', ['update_parties']));
 
     $response->assertStatus(403);
 });
 
 test('rejects invalid role value', function () {
-    $party = createParty();
+    $party = $this->createParty('comp-a');
 
-    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'king'], $this->serviceHeaders('comp-a', ['update_parties']));
+    $response = $this->postJson('/api/parties/'.$party->id.'/roles', ['role' => 'king'], $this->serviceHeaders('comp-a', 'user-1', ['update_parties']));
 
     $response->assertStatus(422);
 });
